@@ -23,4 +23,25 @@ array("codigo" => 5, "nombre" => "Nora Jover",
 "telefono" => "638765432", "email" => "norajover@hotmail.com"),
 
 );
+
+
+print_r($contactos);
+
+echo '<br>';
+
+    
+
+$filtrarPor = strtolower($_GET["filtrarPor"] ?? "Pepe");
+
+
+
+$filtrados = array_filter($contactos, 
+
+    function($alumno) use ($filtrarPor){
+
+        return strpos(strtolower($alumno["email"]), $filtrarPor) !== FALSE;
+
+    });
+
+print_r($filtrados);
 ?>

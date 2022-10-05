@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +8,10 @@
     <title>formulario</title>
 </head>
 <body>
-    Hola <?php echo $_POST["nombre"]; ?><br>
+    Hola <?php echo $_POST["nombreusuario"]; ?><br>
     Tu email es: <?php echo $_POST["email"]; ?><br>
-    Educacion:<?php echo $_POST["educacion"];?><br>
-    Avatar <?php echo $_POST["imagen"];?><br>
+    Contraseña:<?php echo $_POST["contraseña"];?><br>
+    Confirmar contraseña: <?php echo $_POST["confirmar"];?><br>
     
 </body>
 </html>

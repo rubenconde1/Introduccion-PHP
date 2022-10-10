@@ -6,17 +6,20 @@
 
 <body>
 
+{% extends 'base.html.twing' %}
+{% block title %}Contactos{% endblock %}
+{% block body %}
+
     <h1>Ficha del contacto</h1>
 
-    <ul>
+    {% if contacto %}
+        {{include ('partials/datos_contacto.html.twing',{'contacto':contacto})}}
+    {% else %}
 
-        <li><strong>{{ contacto.nombre}}</strong></li>
+        <p>Contacto no encontrado </p>
+    {% endif %}
 
-        <li><strong>Teléfono: </strong>{{ contacto.telefono}}</li>
-
-        <li><strong>Correo: </strong>{{ contacto.email}}</li>
-
-    </ul>
+{% endblock %}
 
 </body>
 

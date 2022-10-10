@@ -16,15 +16,12 @@ class ContactoController extends AbstractController
     public function ficha($codigo): Response{
 
         $resultado = ($this->contactos[$codigo]?? null);
-        
-        if($resultado){
 
     
-            return $this->render("ficha_contacto.html.twig",["contacto"=>$resultado]);
-
-        }else
-
-        return new Response("<html><body>Contacto $codigo no encontrado </body>");
+        return $this->render('ficha_contacto.html.twig', [
+        'contacto' => $resultado
+            
+                ]);
     }
 
     private $contactos = [
@@ -55,17 +52,7 @@ class ContactoController extends AbstractController
         }
     );
 
-    if (count($resultados)) {
-        $html = "<ul>";
-        foreach ($resultados as $id => $resultado) {
-            $html .= "<li>" . $id."</li>";
-            $html .= "<li>" . $resultado["nombre"]."</li>";
-            $html .= "<li>" . $resultado["telefono"]."</li>";
-            $html .= "<li>" . $resultado["email"]."</li>";
-        }
-        $html .="</ul>";
-        return new Response("<html><body>$html</body></html>");
-    }else
-        return new Response("<html><body>No se ha encontrado ningun contacto</body></html>");
-    }
+    return $this->render('lista_contactos.html.twing',['contactos' => $resultados]);
 }
+}
+

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Nombre;
+use App\Entity\Contacto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,14 +14,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Nombre[]    findAll()
  * @method Nombre[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NombreRepository extends ServiceEntityRepository
+class ContactoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Nombre::class);
     }
 
-    public function save(Nombre $entity, bool $flush = false): void
+    public function save(Contacto $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,13 +30,26 @@ class NombreRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Nombre $entity, bool $flush = false): void
+    public function remove(Contacto $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByName($text): array
+    {
+        $entityManager = $this->getEntityManager();
+
+    $query = $entityManager->createQuery(
+
+        'SELECT c FROM App\Entity\Contacto c WHERE c.nombre LIKE :text'
+
+    )->setParameter('text', '%' . $text . '%');
+
+    return $query->execute(); 
     }
 
 //    /**

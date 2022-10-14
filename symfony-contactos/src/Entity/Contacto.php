@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\NombreRepository;
+use App\Repository\ContactoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: NombreRepository::class)]
-class Nombre
+#[ORM\Entity(repositoryClass: ContactoRepository::class)]
+class Contacto
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,6 +30,10 @@ private $nombreCampo;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Provincia $provincia = null;
 
 
     public function getNombre(): ?string
@@ -64,6 +68,18 @@ private $nombreCampo;
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getProvincia(): ?Provincia
+    {
+        return $this->provincia;
+    }
+
+    public function setProvincia(?Provincia $provincia): self
+    {
+        $this->provincia = $provincia;
 
         return $this;
     }

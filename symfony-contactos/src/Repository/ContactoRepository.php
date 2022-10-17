@@ -7,18 +7,18 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Nombre>
+ * @extends ServiceEntityRepository<Contacto>
  *
- * @method Nombre|null find($id, $lockMode = null, $lockVersion = null)
- * @method Nombre|null findOneBy(array $criteria, array $orderBy = null)
- * @method Nombre[]    findAll()
- * @method Nombre[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Contacto|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Contacto|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Contacto[]    findAll()
+ * @method Contacto[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ContactoRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Nombre::class);
+        parent::__construct($registry, Contacto::class);
     }
 
     public function save(Contacto $entity, bool $flush = false): void

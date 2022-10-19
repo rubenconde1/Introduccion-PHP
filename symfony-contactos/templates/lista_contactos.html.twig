@@ -1,25 +1,12 @@
-<!doctype html>
-
-<html>
-
-<meta charset="utf-8">
-
-{% extends 'base.html.twing' %}
+{% extends 'base.html.twig' %}
 {% block title %}Contactos{% endblock %}
 {% block body %}
-
     <h1>Lista de contactos</h1>
 {% if contactos %}
     {% for contacto in contactos %}
         {{include ('partials/datos_contacto.html.twig',{'contacto':contacto})}}
     {% endfor %}
 {% else %}
-
         <p>No se han encontrado contactos</p>
-
     {% endif %}
 {% endblock %}
-
-</body>
-
-</html>

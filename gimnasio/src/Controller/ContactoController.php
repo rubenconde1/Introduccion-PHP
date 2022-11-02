@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\GimnasioType;
 
 class ContactoController extends AbstractController
 
@@ -29,6 +31,55 @@ class ContactoController extends AbstractController
         9 => ["nombre" => "Nora Jover", "telefono" => "54565859", "email" => "norajover@ieselcaminas.org"]
 
     ]; 
+
+
+     /**
+    * @Route("/contacto/nuevo", name="nuevo_contacto")
+    */
+    public function nuevo(ManagerRegistry $doctrine, Request $request) {
+        $contacto = new Gimnasio();
+        
+        $formulario = $this->createForm(GimnasioType::class, $contacto);
+
+        $formulario->handleRequest($request);
+
+        if ($formulario->isSubmitted() && $formulario->isValid()) {
+            $contacto = $formulario->getData();
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($contacto);
+            $entityManager->flush();
+            return $this->redirectToRoute('ficha_contacto', ["codigo" => $contacto->getId()]);
+        }
+        return $this->render('nuevo.html.twig', array(
+            'formulario' => $formulario->createView()
+        ));
+    }
+
+
+       /**
+    * @Route("/contacto/editar/{codigo}", name="editar_contacto",requirements={"codigo"="\d+"})
+    */
+    public function editar(ManagerRegistry $doctrine, Request $request, $codigo) {
+        $repositorio = $doctrine->getRepository(Gimnasio::class);
+
+        $contacto = $repositorio->find($codigo);
+        if ($contacto){
+            $formulario = $this->createForm(GimnasioType::class, $contacto);
+
+            $formulario->handleRequest($request);
+
+            if ($formulario->isSubmitted() && $formulario->isValid()) {
+                $contacto = $formulario->getData();
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($contacto);
+                $entityManager->flush();
+            }
+            return $this->render('nuevo.html.twig', array(
+                'formulario' => $formulario->createView()
+            ));
+    }
+
+}
     
 
     /**
@@ -73,7 +124,7 @@ class ContactoController extends AbstractController
     */
     public function buscar(ManagerRegistry $doctrine, $texto): Response{
         //Filtramos aquellos que contengan dicho texto en el nombre
-        $repositorio = $doctrine->getRepository(Contacto::class);
+        $repositorio = $doctrine->getRepository(Gimnasio::class);
     
         $contactos = $repositorio->findByName($texto);
     
@@ -157,11 +208,11 @@ class ContactoController extends AbstractController
 
 
     /**
-    * @Route("/contacto/insertarSinProvincia", name="insertar_sin_provincia_contacto")
+    * @Route("/contacto/insertarSinDistribuidor", name="insertar_sin_distribuidores_contacto")
     */
-    public function insertarSinProvincia(ManagerRegistry $doctrine): Response{
+    public function insertarSinDistribuidor(ManagerRegistry $doctrine): Response{
         $entityManager = $doctrine->getManager();
-        $repositorio = $doctrine->getRepository(Provincia::class);
+        $repositorio = $doctrine->getRepository(Distribuidores::class);
 	    
         $distribuidor = $repositorio->findOneBy(["nombre" => "Alicante"]);
 
@@ -179,24 +230,5 @@ class ContactoController extends AbstractController
             'contacto' => $gimnasio
         ]);
     }
-
-    /**
-    * @Route("/contacto/nuevo", name="nuevo_gimnasio")
-    */
-    public function nuevo() {
-        $gimnasio = new Gimnasio();
-        
-        $formulario = $this->createFormBuilder($gimnasio)
-            ->add('nombre',TextType::class)
-            ->add('telefono',TextType::class)
-            ->add('email',TextType::class)
-            ->add('save',SubmitType::class, array('label' => 'Enviar'))
-            ->getForm();
-
-        return $this->render('nuevo.html.twig', array(
-            'formulario' => $formulario->createView()
-        ));
-    }
-
 
 }

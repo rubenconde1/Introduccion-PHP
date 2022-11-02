@@ -1,12 +1,12 @@
 <ul>
 
-    <li><strong>{{ gimnasio.nombre }}</strong></li>
+    <li><strong>{{ contacto.nombre }}</strong></li>
 
-    <li><strong>Teléfono</strong>: {{ gimnasio.telefono }}</li>
-    {% if gimnasio.distribuidor %}
-    <li><strong>distribuidor: </strong>{{gimnasio.distribuidor.nombre}}</li>
+    <li><strong>Teléfono</strong>: {{ contacto.telefono }}</li>
+    {% if contacto.distribuidor %}
+    <li><strong>distribuidor: </strong>{{contacto.distribuidor.nombre}}</li>
     {% endif %}
 
-    <li><strong>Correo: </strong>: {{ gimnasio.email }}</li>
+    <li><strong>Correo: </strong>: {{ contacto.email }}</li>
 
 </ul>

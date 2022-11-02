@@ -21,6 +21,14 @@ class GimnasioRepository extends ServiceEntityRepository
         parent::__construct($registry, Gimnasio::class);
     }
 
+    public function findByName($text):array{
+        $qb= $this->createQueryBuilder("c")
+        ->andWhere("c.nombre LIKE :text")
+        ->setParameter("text", "%" . $text . "%")
+        ->getQuery(); 
+        return $qb->execute();
+    }
+
     public function save(Gimnasio $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

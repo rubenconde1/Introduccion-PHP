@@ -63,23 +63,44 @@ class ContactoController extends AbstractController
         $repositorio = $doctrine->getRepository(Gimnasio::class);
 
         $contacto = $repositorio->find($codigo);
+    
         if ($contacto){
+    
             $formulario = $this->createForm(GimnasioType::class, $contacto);
-
+    
             $formulario->handleRequest($request);
-
+    
             if ($formulario->isSubmitted() && $formulario->isValid()) {
+    
                 $contacto = $formulario->getData();
+    
                 $entityManager = $doctrine->getManager();
+    
                 $entityManager->persist($contacto);
+    
                 $entityManager->flush();
+    
+                return $this->redirectToRoute('ficha_contacto', ["codigo" => $contacto->getId()]);
+    
             }
+    
             return $this->render('nuevo.html.twig', array(
+    
                 'formulario' => $formulario->createView()
+    
             ));
+    
+        }else{
+    
+            return $this->render('ficha_contacto.html.twig', [
+    
+                'contacto' => NULL
+    
+            ]);
+    
+        }
+    
     }
-
-}
     
 
     /**

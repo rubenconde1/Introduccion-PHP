@@ -6,71 +6,30 @@ use App\Repository\GimnasioRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
-  /**
-
- * @ORM\Entity(repositoryClass=GimnasioRepository::class)
-
- */
+#[ORM\Entity(repositoryClass: GimnasioRepository::class)]
 
 class Gimnasio
 {
-    /**
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-     * @ORM\Id
+    #[ORM\Column(length:255)]
+    #[Assert\NotBlank(message:'El nombre es obligatorio')]
+    private ?string $nombre = null;
+    
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'el telefono es obligatorio')]
+    private ?int $telefono = null;
 
-     * @ORM\GeneratedValue
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:'el email es obligatorio')]
 
-     * @ORM\Column(type="integer")
+    private ?string $email = null;
 
-     */
-
-    private $id;
-
-    /**
-
-     * @ORM\Column(type="string", length=255)
-
-     * @Assert\NotBlank
-
-     * (message="El nombre es obligatorio")
-
-     */
-
-    private $nombre;
-
-    /**
-
-     * @ORM\Column(type="string", length=15)
-
-     * @Assert\NotBlank
-
-     * (message="El teléfono es obligatorio")
-
-     */
-
-    private $telefono;
-
-    /**
-
-     * @ORM\Column(type="string", length=255)
-
-     * @Assert\NotBlank()
-
-     * @Assert\Email
-
-     * (message="El email {{ value }} no es válido")
-
-     */
-
-    private $email;
-
-    /**
-
-     * @ORM\ManyToOne(targetEntity=Provincia::class)
-
-     */
-
-    private $distribuidor;
+    #[ORM\ManyToOne]
+    private ?Distribuidores $distribuidor = null;
 
     public function getId(): ?int
 
@@ -142,7 +101,7 @@ class Gimnasio
 
     }
 
-    public function setProvincia(?Distribuidores $distribuidor): self
+    public function setDistribuidor(?Distribuidores $distribuidor): self
 
     {
 

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -28,6 +27,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function getId(): ?int
     {
@@ -98,4 +100,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+public function getName(): ?string
+{
+    return $this->name;
+}
+
+public function setName(string $name): self
+{
+    $this->name = $name;
+
+    return $this;
+}
+
 }

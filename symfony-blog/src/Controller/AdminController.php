@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 
+
 class AdminController extends AbstractController
 {
     #[Route('/admin/images', name: 'app_images')]

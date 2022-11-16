@@ -54,4 +54,5 @@ public function newPost(ManagerRegistry $doctrine, Request $request, SluggerInte
     ));
 }
 
+
 }

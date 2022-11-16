@@ -16,11 +16,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    public function __construct()
+
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->publishedAt = new \DateTime();
+        parent::__construct($registry, Post::class);
     }
-    
 
     public function save(Post $entity, bool $flush = false): void
     {

@@ -23,13 +23,33 @@ class BlogController extends AbstractController
     {
         return $this->render('blog/blog.html.twig', []);
     }
-
-    #[Route('/singlepost', name: 'singlepost')]
-    public function singlepost(): Response
+    #[Route('/single_post/{slug}', name: 'single_post')]
+    public function post(ManagerRegistry $doctrine, Request $request, $slug): Response
     {
-        return $this->render('blog/singlepost.html.twig', []);
+        $repository = $doctrine->getRepository(Post::class);
+        $post = $repository->findOneBy(["slug"=>$slug]);
+        $recents = $repository->findRecents();
+        $comment = new Comment();
+        $form = $this->createForm(CommentFormType::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment = $form->getData();
+            $comment->setPost($post);  
+            //Aumentamos en 1 el número de comentarios del post
+            $post->setNumComments($post->getNumComments() + 1);
+            $entityManager = $doctrine->getManager();    
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return $this->redirectToRoute('single_post', ["slug" => $post->getSlug()]);
+        }
+        return $this->render('blog/single_post.html.twig', [
+            'post' => $post,
+            'recents' => $recents,
+            'commentForm' => $form->createView()
+        ]);
     }
-
+    
+    
     #[Route('/blog/new', name: 'new_post')]
 public function newPost(ManagerRegistry $doctrine, Request $request, SluggerInterface $slugger): Response
 {
@@ -65,15 +85,40 @@ public function newPost(ManagerRegistry $doctrine, Request $request, SluggerInte
         $entityManager = $doctrine->getManager();    
         $entityManager->persist($post);
         $entityManager->flush();
-        return $this->render('blog/new_post.html.twig', array(
-            'form' => $form->createView()    
-        ));
+        return $this->redirectToRoute('single_post', ["slug" => $post->getSlug()]);
+
 
     }
         
     return $this->render('blog/new_post.html.twig', array(
         'form' => $form->createView()    
     ));
+}
+
+#[Route('/blog/{page}', name: 'blog', requirements:['page' => "\d+"])]
+public function index(ManagerRegistry $doctrine, int $page = 1): Response
+{
+    $repository = $doctrine->getRepository(Post::class);
+    $posts = $repository->findAllPaginated($page);
+
+    return $this->render('blog/blog.html.twig', [
+        'posts' => $posts,
+    ]);
+}
+
+#[Route('/single_post/{slug}/like', name: 'post_like')]
+public function like(ManagerRegistry $doctrine, $slug): Response
+{
+    $repository = $doctrine->getRepository(Post::class);
+    $post = $repository->findOneBy(["slug"=>$slug]);
+    if ($post){
+        $post->setNumLikes($post->getNumLikes() + 1);
+        $entityManager = $doctrine->getManager();    
+        $entityManager->persist($post);
+        $entityManager->flush();
+    }
+    return $this->redirectToRoute('single_post', ["slug" => $post->getSlug()]);
+
 }
 
 

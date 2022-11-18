@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Pagination\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+
 
 /**
  * @extends ServiceEntityRepository<Post>
@@ -39,6 +41,46 @@ class PostRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+/**
+* Returns an array of Post objects
+*/
+public function findAll()
+{
+    return $this->createQueryBuilder('p')
+        ->orderBy('p.publishedAt', 'DESC')
+        ->getQuery()
+        ->getResult()
+    ;
+}
+
+/**
+* @return Post[] Returns an array of Post objects
+*/
+public function findRecents()
+{
+    return $this->createQueryBuilder('p')
+        ->orderBy('p.publishedAt', 'DESC')
+        ->setMaxResults(5)
+        ->getQuery()
+        ->getResult()
+    ;
+}
+
+/**
+* @return Post[] Returns an array of Post objects
+*/
+public function findAllPaginated(int $page): Paginator
+{
+    $qb =  $this->createQueryBuilder('p')
+        ->orderBy('p.publishedAt', 'DESC')            
+    ;
+	//Devolvemos los resutados de la página
+    return (new Paginator($qb))->paginate($page);
+}
+
+
+
 
 //    /**
 //     * @return Post[] Returns an array of Post objects

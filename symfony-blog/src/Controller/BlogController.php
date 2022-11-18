@@ -37,6 +37,26 @@ public function newPost(ManagerRegistry $doctrine, Request $request, SluggerInte
     $form = $this->createForm(PostFormType::class, $post);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
+        $file = $form->get('Image')->getData();
+        if ($file) {
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            // this is needed to safely include the file name as part of the URL
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+    
+            // Move the file to the directory where images are stored
+            try {
+                
+                $file->move(
+                    $this->getParameter('post_image_directory'), $newFilename
+                );
+               
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+            $post->setImage($newFilename);
+        }
+    
         $post = $form->getData();   
         $post->setSlug($slugger->slug($post->getTitle()));
         $post->setPostUser($this->getUser());
@@ -48,7 +68,9 @@ public function newPost(ManagerRegistry $doctrine, Request $request, SluggerInte
         return $this->render('blog/new_post.html.twig', array(
             'form' => $form->createView()    
         ));
+
     }
+        
     return $this->render('blog/new_post.html.twig', array(
         'form' => $form->createView()    
     ));

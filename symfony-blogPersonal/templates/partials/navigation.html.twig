@@ -1,54 +1,35 @@
-<!-- Navigation Bar -->
-   <nav class="navbar navbar-fixed-top navbar-default">
-     <div class="container">
-         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a  class="navbar-brand page-scroll" href="#page-top">
-              <span>[PHOTO]</span>
-            </a>
-         </div>
-         <div class="collapse navbar-collapse navbar-right" id="menu">
+<!-- Navbar Start -->
+                <div class="container p-0">
+                    <nav class="navbar navbar-expand-lg bg-secondary navbar-dark">
+                        <a href="" class="navbar-brand d-block d-lg-none">Navigation</a>
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <ul class="navbar-nav m-auto">
+                               <li class="{{ (app.request.attributes.get('_route') == 'index')  ? 'active': ''}} lien">
+                              <a href="{{ path('index') }}"><i class="fa fa-home sr-icons"></i> Home</a></li>
 
-    <ul class="nav navbar-nav">
- <li class="{{ (app.request.attributes.get('_route') == 'index')  ? 'active': ''}} lien">
-<a href="{{ path('index') }}"><i class="fa fa-home sr-icons"></i> Home</a></li>
-</li>
+                                <li class="{{ (app.request.attributes.get('_route') == 'about')  ? 'active': ''}} lien">
+                              <a href="{{ path('about') }}"><i class="fa fa-home sr-icons"></i> About</a></li>
 
-<li class="{{ (app.request.attributes.get('_route') == 'about')  ? 'active': ''}} lien">
-<a href="{{ path('about') }}"><i class="fa fa-home sr-icons"></i> About</a></li>
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                                    <div class="dropdown-menu">
+                                        <li class="{{ (app.request.attributes.get('_route') == 'blog')  ? 'active': ''}} lien">
+                                        <a href="{{ path('blog') }}"><i class="fa fa-home sr-icons"></i> Blog</a></li>
 
-    </li>
-    <li class="{{ (app.request.attributes.get('_route') == 'blog')  ? 'active': ''}} lien">
-<a href="{{ path('blog') }}"><i class="fa fa-home sr-icons"></i> Blog</a></li>
+                                        <li class="{{ (app.request.attributes.get('_route') == 'single')  ? 'active': ''}} lien">
+                                        <a href="{{ path('single') }}"><i class="fa fa-home sr-icons"></i> Single</a></li>
 
-    </li>
- <li class="{{ (app.request.attributes.get('_route') == 'contact')  ? 'active': ''}} lien">
-<a href="{{ path('contact') }}"><i class="fa fa-home sr-icons"></i> Contact</a></li>
+                                    </div>
+                                </div>
+                                 <li class="{{ (app.request.attributes.get('_route') == 'contact')  ? 'active': ''}} lien">
+                                  <a href="{{ path('contact') }}"><i class="fa fa-home sr-icons"></i> Contact</a></li>
 
-    </li>
-
- <li class="{{ (app.request.attributes.get('_route') == 'single')  ? 'active': ''}} lien">
-<a href="{{ path('single') }}"><i class="fa fa-home sr-icons"></i> Single</a></li>
-
-    </li>
-    {% if app.user %}
-
-  <li><a href="{{ path('app_logout') }}"><i class="fa fa-sign-out sr-icons"></i> {{ app.user.name }} - Logout</a></li>
-  <li><a href="{{ path('new_post') }}"><i class="fa fa-plus-square sr-icons"></i> New post</a></li>
-
-{% else %}
-  <li class="{{ (app.request.attributes.get('_route') == 'app_login')  ? 'active': ''}} lien"><a href="{{ path('app_login') }}"><i class="fa fa-sign-in sr-icons"></i> Login</a></li>
-  <li class="{{ (app.request.attributes.get('_route') == 'app_register')  ? 'active': ''}} "><a href="{{ path('app_register') }}"><i class="fa fa-user-secret sr-icons"></i> Register</a></li>
-{% endif %}
-
-
-    </ul>
-         </div>
-     </div>
-   </nav>
-<!-- End of Navigation Bar -->
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <!-- Navbar End -->
+                

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,20 +14,28 @@ class Contact
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
+#[ORM\Column(length: 255)]
+#[Assert\NotBlank(message: "Field `First Name` is mandatory")]
+private $firstName;
 
-    #[ORM\Column(length: 255)]
-    private ?string $lastName = null;
+#[ORM\Column(length: 255)]
+#[Assert\NotBlank(message: "Field 'Last Name' is mandatory")]
+private $lastName;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+#[ORM\Column(length: 255)]
+#[Assert\NotBlank(message: "Field `email` is mandatory")]
+#[Assert\Email(message:"{{ value }} is not a valid email")]
+private $email;
 
-    #[ORM\Column(length: 255)]
-    private ?string $subject = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $message = null;
+
+#[ORM\Column(length: 255)]
+#[Assert\NotBlank(message: "Field 'subject' is mandatory")]
+private $subject;
+
+#[ORM\Column(type: Types::TEXT)]
+#[Assert\NotBlank(message: "Field 'messege' is mandatory")]
+private $message;
 
     public function getId(): ?int
     {

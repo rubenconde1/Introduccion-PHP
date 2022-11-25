@@ -7,16 +7,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Contact;
+use App\Entity\Post;
 use App\Form\ContactFormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PageController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(ManagerRegistry $doctrine, Request $request): Response
     {
-        return $this->render('page/index.html.twig', []);
+        $repository = $doctrine->getRepository(Category::class);
+    
+        $categories = $repository->findAll();
+    
+        return $this->render('page/index.html.twig', ['categories' => $categories]);
     }
+    
     
     #[Route('/about', name: 'about')]
 public function about(): Response
@@ -53,6 +60,31 @@ public function single(): Response
 {
     return $this->render('page/single.html.twig', []);
 }
+
+#[Route('/blog/new', name: 'new_post')]
+public function newPost(ManagerRegistry $doctrine, Request $request, SluggerInterface $slugger): Response
+{
+    $post = new Post();
+    $form = $this->createForm(PostFormType::class, $post);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $post = $form->getData();   
+        $post->setSlug($slugger->slug($post->getTitle()));
+        $post->setPostUser($this->getUser());
+        $post->setNumLikes(0);
+        $post->setNumComments(0);
+        $entityManager = $doctrine->getManager();    
+        $entityManager->persist($post);
+        $entityManager->flush();
+        return $this->render('blog/new_post.html.twig', array(
+            'form' => $form->createView()    
+        ));
+    }
+    return $this->render('/new_post.html.twig', array(
+        'form' => $form->createView()    
+    ));
+}
+
 
 
 #[Route('/thankyou', name: 'thankyou')]
